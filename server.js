@@ -6,11 +6,14 @@ const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
-const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
 require('bcryptjs');
 require('dotenv').config();
+
+const initializePassport = require('./controllers/passportConfig');
+
+initializePassport(passport);
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -19,12 +22,13 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-app.use(session({ secret: 'secretcode', resave: true, saveUninitialized: true }));
-app.use(cookieParser('secretcode'));
-
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+}));
 app.use(passport.initialize());
 app.use(passport.session());
-require('./controllers/passportConfig')(passport);
 
 //* ---------- DATABASE CONNECTION ----------- *\\
 const uri = process.env.ATLAS_URI;

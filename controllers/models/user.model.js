@@ -14,9 +14,9 @@ const userSchema = mongoose.Schema({
     trim: true,
     minlength: 5,
   },
-  group_points: { type: Number },
-  group_week_points: { type: Number },
-  group_id: { type: String },
+  group_points: { type: Number, default: 0 },
+  group_tasks: { type: Number, default: 0 },
+  group_id: { type: String, default: '' },
   personal_list: {
     lists: [
       {
