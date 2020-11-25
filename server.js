@@ -7,7 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const MemoryStore = require('memorystore')(session);
 
 require('bcryptjs');
 require('dotenv').config();
@@ -20,20 +20,6 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.set('trust proxy', 1);
-
-//* ---------- DATABASE CONNECTION ----------- *\\
-const uri = process.env.ATLAS_URI;
-const databaseOptions = {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-};
-mongoose.connect(uri, databaseOptions);
-const connection = mongoose.connection;
-connection.once('open', () => {
-  console.log('Mongo DB database connection established successfully');
-});
 
 //* ---------- MIDDLEWARES ----------- *\\
 app.use(express.json());
@@ -52,14 +38,30 @@ app.use(session({
     secure: true,
     maxAge: 60000,
   },
-  store: new MongoStore({ mongooseConnection: connection }),
-  secret: 'secret',
-  saveUninitialized: true,
+  store: new MemoryStore({
+    checkPeriod: 86400000,
+  }),
   resave: false,
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: true,
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+//* ---------- DATABASE CONNECTION ----------- *\\
+const uri = process.env.ATLAS_URI;
+const databaseOptions = {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+};
+mongoose.connect(uri, databaseOptions);
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log('Mongo DB database connection established successfully');
+});
 
 //* ---------- ROUTES ----------- *\\
 const usersRouter = require('./controllers/routes/users');
