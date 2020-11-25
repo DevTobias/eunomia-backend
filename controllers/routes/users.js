@@ -40,10 +40,18 @@ router.route('/login').post((req, res, next) => {
     else {
       req.logIn(user, (loginError) => {
         if (loginError) res.status(500).json(loginError.toString());
-        res.status(400).json({ message: 'succesfully authenticated', user });
+        res.status(200).json({ message: 'succesfully authenticated', user });
       });
     }
   })(req, res, next);
+});
+
+router.route('/is-authenticated').post((req, res) => {
+  if (req.isAuthenticated()) {
+    res.status(200).json({ message: 'authenticated' });
+  } else {
+    res.status(400).json({ message: 'not authenticated' });
+  }
 });
 
 module.exports = router;
