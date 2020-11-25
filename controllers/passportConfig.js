@@ -24,9 +24,7 @@ function initialize(passport) {
     usernameField: 'email',
   }, authenticateUser));
 
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
+  passport.serializeUser((user, done) => done(null, user.id));
 
   passport.deserializeUser((id, done) => {
     User.findOne({ _id: id }, (err, user) => {
@@ -37,7 +35,7 @@ function initialize(passport) {
         surname: user.surname,
         email: user.email,
       };
-      done(err, userInformation);
+      return done(err, userInformation);
     });
   });
 }
