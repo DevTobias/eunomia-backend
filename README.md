@@ -57,6 +57,12 @@ Now everything should be installed and is ready to start.
 npm start
 ```
 
+### Authentication problems
+
+**Note**: This is only a production problem, which means that this problem doesn't occur on local hosts!
+There is a problem with chrome (-based) browsers, where the autentication dows not work. The reason are the SameSite Cookie flags. You can change them with typing `chrome://flags` in your search field. Then look for the following flags and set them to disabled: `SameSite by default cookies`, `Enable removing SameSite=None cookies` and `Cookies without SameSite must be secure
+`. Now everything should work as intended.
+
 ## License
 
 The Eunomia Backend is available under the MIT license, see the [LICENSE](https://github.com/DevTobias/eunomia-backend/blob/main/LICENSE) file for more information.
