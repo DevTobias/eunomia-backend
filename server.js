@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
-const session = require('cookie-session');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 require('bcryptjs');
 require('dotenv').config();
@@ -18,18 +19,7 @@ initializePassport(passport);
 const app = express();
 const port = process.env.PORT || 5000;
 
-//* ---------- MIDDLEWARES ----------- *\\
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-app.use(cors({ origin: 'https://eunomia-frontend.herokuapp.com', credentials: true }));
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+app.set('trust proxy', 1);
 
 //* ---------- DATABASE CONNECTION ----------- *\\
 const uri = process.env.ATLAS_URI;
@@ -44,6 +34,32 @@ const connection = mongoose.connection;
 connection.once('open', () => {
   console.log('Mongo DB database connection established successfully');
 });
+
+//* ---------- MIDDLEWARES ----------- *\\
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: 'https://eunomia-frontend.herokuapp.com', credentials: true }));
+
+/* app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+})); */
+
+app.use(session({
+  cookie: {
+    secure: true,
+    maxAge: 60000,
+  },
+  store: new MongoStore({ mongooseConnection: connection }),
+  secret: 'secret',
+  saveUninitialized: true,
+  resave: false,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 //* ---------- ROUTES ----------- *\\
 const usersRouter = require('./controllers/routes/users');
