@@ -22,12 +22,13 @@ function initialize(passport) {
 
   passport.use(new LocalStrategy({
     usernameField: 'email',
+    passwordField: 'password',
   }, authenticateUser));
 
-  passport.serializeUser((user, done) => done(null, user.id));
+  passport.serializeUser((user, done) => done(null, user.email));
 
-  passport.deserializeUser((id, done) => {
-    User.findOne({ _id: id }, (err, user) => {
+  passport.deserializeUser((email, done) => {
+    User.findOne({ email }, (err, user) => {
       const userInformation = {
         id: user._id,
         username: user.username,
@@ -35,8 +36,8 @@ function initialize(passport) {
         surname: user.surname,
         email: user.email,
       };
-      return done(err, userInformation);
-    });
+      return done(null, userInformation);
+    }).catch((findError) => done(findError));
   });
 }
 
