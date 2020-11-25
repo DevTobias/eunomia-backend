@@ -16,25 +16,19 @@ const userSchema = mongoose.Schema({
   },
   group_points: { type: Number, default: 0 },
   group_tasks: { type: Number, default: 0 },
-  group_id: { type: String, default: '' },
-  personal_list: {
-    lists: [
+  group_id: { type: String, default: '42' },
+  lists: [
+    [
       {
-        name: { type: String, required: true, trim: true },
-        tasks: [
-          {
-            title: { type: String, required: true, trim: true },
-            icon: { type: String, required: true, trim: true },
-            creator: { type: String, required: true, trim: true },
-            date: { type: Date },
-            checked: { type: Boolean, required: true },
-            tagColor: { type: String, required: true, trim: true },
-            completion_date: { type: Date },
-          },
-        ],
+        title: { type: String, required: true, trim: true },
+        icon: { type: String, required: true, trim: true },
+        creator: { type: String, required: true, trim: true },
+        date: { type: String, trim: true },
+        checked: { type: Boolean, required: true },
+        tagColor: { type: String, required: true, trim: true },
       },
     ],
-  },
+  ],
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);

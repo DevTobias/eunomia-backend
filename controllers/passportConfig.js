@@ -31,9 +31,7 @@ function initialize(passport) {
     User.findOne({ email }, (err, user) => {
       const userInformation = {
         id: user._id,
-        username: user.username,
-        forname: user.forname,
-        surname: user.surname,
+        fullname: user.fullname,
         email: user.email,
       };
       return done(null, userInformation);
