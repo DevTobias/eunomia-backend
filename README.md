@@ -1,4 +1,4 @@
-# Eunomia Frontend
+# Eunomia Backend
 
 `Eunomia` is a To-Do-Application for a shared appartment, so they can manage their tasks. This repositorie is the frontend part of the whole Program.
 
@@ -28,13 +28,25 @@ First of all make sure you install **all** the above **listed requirements** on 
 
 ```bash
 # Clone this git repository
-git clone https://github.com/DevTobias/eunomia-frontend.git
+git clone https://github.com/DevTobias/eunomia-backend.git
 
 # Move to the project root directory
-cd eunomia-frontend
+cd eunomia-backend
 
 # Install the dependencies with npm package manager
 npm install
+```
+
+### Necessary adjustments
+
+Because of security reasons, the '.env' file is **missing**. The '.env' contains the needed `ATLAS_URI` Token to access your MongoDB Atlas database and a `SESSION_SECRET` for user authentification.
+
+For the application to work, you have to add this file and add following code to it (note: you have to change the `<...>` to your values):
+
+#### .env
+```
+ATLAS_URI=<ATLAS_URI from Cluster>
+SESSION_SECRET=<Random/long string>
 ```
 
 Now everything should be installed and is ready to start.
@@ -47,4 +59,4 @@ npm start
 
 ## License
 
-The Eunomia Frontend is available under the MIT license, see the [LICENSE](https://github.com/DevTobias/eunomia-frontend/blob/main/LICENSE) file for more information.
+The Eunomia Backend is available under the MIT license, see the [LICENSE](https://github.com/DevTobias/eunomia-backend/blob/main/LICENSE) file for more information.
