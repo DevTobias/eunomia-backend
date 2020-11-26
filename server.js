@@ -65,8 +65,10 @@ connection.once('open', () => {
 
 //* ---------- ROUTES ----------- *\\
 const usersRouter = require('./controllers/routes/users');
+const groupRouter = require('./controllers/routes/group');
 
 app.use('/users', usersRouter);
+app.use('/group', groupRouter);
 
 //* ---------- START SERVER ----------- *\\
 app.listen(port, () => console.log(`Server is running on port ${port}`));

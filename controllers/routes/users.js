@@ -22,9 +22,7 @@ router.route('/register').post((req, res) => {
         fullname: req.body.fullname,
         email: req.body.email,
         password: hashedPassword,
-        personal_list: {
-          lists: [],
-        },
+        lists: [[]],
       });
       await newUser.save()
         .then(() => res.status(200).json({
@@ -63,6 +61,14 @@ router.route('/is-authenticated').post((req, res) => {
 //* ---------- User information ----------- *\\
 //* --------------------------------------- *\\
 
+router.route('/get-name').get((req, res) => {
+  if (req.user) {
+    res.status(200).json({ message: 'successfully sent username', fullname: req.user.fullname });
+  } else {
+    res.status(400).json({ message: 'not authenticated' });
+  }
+});
+
 router.route('/get-lists').post((req, res) => {
   const query = { email: req.user.email };
 
@@ -80,6 +86,7 @@ router.route('/save-lists').post((req, res) => {
     const query = { email: req.user.email };
     const update = { lists: req.body.lists };
     const options = { returnNewDocument: true };
+
     User.findOneAndUpdate(query, update, options)
       .then((updatedDocument) => {
         if (!updatedDocument) res.status(400).json({ message: 'could not save lists' });

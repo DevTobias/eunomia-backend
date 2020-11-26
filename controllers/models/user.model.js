@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
   },
   group_points: { type: Number, default: 0 },
   group_tasks: { type: Number, default: 0 },
-  group_id: { type: String, default: '42' },
+  group_name: { type: String, default: 'eunomia-test' },
   lists: [
     [
       {
